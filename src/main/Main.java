@@ -5,6 +5,7 @@ import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
@@ -24,7 +25,7 @@ import handler.movement.MovementHandler;
  */
 public class Main extends SimpleApplication {
 
-    private MovementHandler movementHandler = new MovementHandler();
+    private MovementHandler movementHandler;
     private CharacterControl player;
 
     private Spatial sceneModel;
@@ -38,6 +39,10 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        //Beginning of the final Code
+        movementHandler = new MovementHandler();
+        //Ending of the final Code
+        
         /**
          * Set up Physics
          */
@@ -47,7 +52,7 @@ public class Main extends SimpleApplication {
 
         // We re-use the flyby camera for rotation, while positioning is handled by physics
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        flyCam.setMoveSpeed(75);
+        flyCam.setMoveSpeed(60);
         movementHandler.setUpKeys(inputManager);
         setUpLight();
 
@@ -68,18 +73,10 @@ public class Main extends SimpleApplication {
         // size, stepheight, jumping, falling, and gravity.
         // We also put the player in its starting position.
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
-        player = new CharacterControl(capsuleShape, 0.05f);
+        player = new CharacterControl(capsuleShape, 0.1f);
         player.setJumpSpeed(20);
-        player.setFallSpeed(30);
-
-        //Some methods used for setting gravity related variables were deprecated in
-        //the 3.2 version of the engine. Choose the method that matches your version
-        //of the engine.
-        // < jME3.2
-        // player.setGravity(30f);
-        // >= jME3.2
-        player.setGravity(new Vector3f(0, -30f, 0));
-
+        player.setFallSpeed(55);
+        player.setGravity(new Vector3f(0, -50f, 0));
         player.setPhysicsLocation(new Vector3f(0, 10, 0));
 
         // We attach the scene and the player to the rootnode and the physics space,
@@ -104,6 +101,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         movementHandler.move(cam, player);
+        
+        System.out.println(player.getPhysicsLocation());
     }
 
     @Override

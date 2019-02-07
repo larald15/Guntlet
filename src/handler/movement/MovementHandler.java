@@ -5,6 +5,7 @@
  */
 package handler.movement;
 
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -12,6 +13,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
 
 /**
  *
@@ -33,7 +35,7 @@ public class MovementHandler {
     public static final String MAPPING_BACKWARDS = "Backward";
     public static final String MAPPING_JUMP = "Jump";
 
-    //temp variables
+    //temporary variables
     private Vector3f walkDirection = new Vector3f();
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
@@ -70,8 +72,9 @@ public class MovementHandler {
             walkDirection.addLocal(camDir.negate());
         }
         if (KeyListener.jump) {
-            player.jump(new Vector3f(0, 20f, 0));
+            player.jump(new Vector3f(0, 30f, 0));
         }
+        
         player.setWalkDirection(walkDirection);
         cam.setLocation(player.getPhysicsLocation());
     }
