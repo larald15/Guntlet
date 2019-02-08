@@ -5,12 +5,10 @@
  */
 package handler.movement;
 
-import com.jme3.input.controls.AnalogListener;
-
 /**
  *
  * @author Larsen
  */
-public class MouseListener{
-    
+public class MouseListener {
+
 }

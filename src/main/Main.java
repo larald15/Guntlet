@@ -1,21 +1,13 @@
 package main;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Spatial;
+import controller.physics.PhysicsControler;
+import handler.collision.CollisionHandler;
 import handler.movement.MovementHandler;
+import renderer.map.MapRenderer;
+import renderer.player.PlayerRenderer;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -26,11 +18,12 @@ import handler.movement.MovementHandler;
 public class Main extends SimpleApplication {
 
     private MovementHandler movementHandler;
-    private CharacterControl player;
+    private MapRenderer mapRenderer;
+    private PhysicsControler physicsControler;
+    private PlayerRenderer playerRenderer;
+    private CollisionHandler collisionHandler;
 
-    private Spatial sceneModel;
     private BulletAppState bulletAppState;
-    private RigidBodyControl landscape;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -39,75 +32,32 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        //Beginning of the final Code
-        movementHandler = new MovementHandler();
-        //Ending of the final Code
-        
-        /**
-         * Set up Physics
-         */
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-        //bulletAppState.setDebugEnabled(true);
+        movementHandler = new MovementHandler(rootNode, flyCam);
+        mapRenderer = new MapRenderer(rootNode, assetManager, viewPort);
+        playerRenderer = new PlayerRenderer(rootNode);
+        collisionHandler = new CollisionHandler();
 
-        // We re-use the flyby camera for rotation, while positioning is handled by physics
-        viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        flyCam.setMoveSpeed(60);
+        collisionHandler.setUpCollision();
+
+        playerRenderer.setUpPlayer(assetManager);
+
+        mapRenderer.setUpLight();
+        mapRenderer.setUpMap();
+
         movementHandler.setUpKeys(inputManager);
-        setUpLight();
+        movementHandler.setUpPlayer();
 
-        // We load the scene from the zip file and adjust its size.
-        assetManager.registerLocator("town.zip", ZipLocator.class);
-        sceneModel = assetManager.loadModel("main.scene");
-        sceneModel.setLocalScale(2f);
-
-        // We set up collision detection for the scene by creating a
-        // compound collision shape and a static RigidBodyControl with mass zero.
-        CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(sceneModel);
-        landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.addControl(landscape);
-
-        // We set up collision detection for the player by creating
-        // a capsule collision shape and a CharacterControl.
-        // The CharacterControl offers extra settings for
-        // size, stepheight, jumping, falling, and gravity.
-        // We also put the player in its starting position.
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
-        player = new CharacterControl(capsuleShape, 0.1f);
-        player.setJumpSpeed(20);
-        player.setFallSpeed(55);
-        player.setGravity(new Vector3f(0, -50f, 0));
-        player.setPhysicsLocation(new Vector3f(0, 10, 0));
-
-        // We attach the scene and the player to the rootnode and the physics space,
-        // to make them appear in the game world.
-        rootNode.attachChild(sceneModel);
-        bulletAppState.getPhysicsSpace().add(landscape);
-        bulletAppState.getPhysicsSpace().add(player);
-    }
-
-    private void setUpLight() {
-        // We add light so we see the scene
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
-
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White);
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
+        physicsControler = new PhysicsControler(bulletAppState, movementHandler, mapRenderer);
+        physicsControler.setUpPhysics(stateManager, rootNode, assetManager, viewPort, flyCam);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        movementHandler.move(cam, player);
-        
-        System.out.println(player.getPhysicsLocation());
+        movementHandler.move(cam, movementHandler.getPlayer());
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
     }
 
 }
