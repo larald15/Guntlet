@@ -19,8 +19,7 @@ import com.jme3.scene.shape.Box;
  */
 public class PlayerRenderer {
 
-    private Node rootNode;
-
+    private final Node rootNode;
     public Node playerNode;
 
     public PlayerRenderer(Node rootNode) {
@@ -30,13 +29,13 @@ public class PlayerRenderer {
     public void setUpPlayer(AssetManager assetManager) {
         playerNode = new Node("PlayerNode");
         
-        Box box1 = new Box(1, 1, 1);
+        Box box1 = new Box(1.5f, 6f, 1);
         Geometry playerBox = new Geometry("Box", box1);
         Material mat = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");  // create a simple material
         mat.setColor("Color", ColorRGBA.Blue);   // set color of material to blue
         playerBox.setMaterial(mat);
-        playerBox.setLocalTranslation(new Vector3f(0, 10f, 0));
+        playerBox.setLocalTranslation(new Vector3f(0, 30f, 0));
         
         playerNode.attachChild(playerBox);
         rootNode.attachChild(playerNode);

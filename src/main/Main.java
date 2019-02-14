@@ -32,20 +32,17 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        movementHandler = new MovementHandler(rootNode, flyCam);
         mapRenderer = new MapRenderer(rootNode, assetManager, viewPort);
-        playerRenderer = new PlayerRenderer(rootNode);
         collisionHandler = new CollisionHandler();
+        movementHandler = new MovementHandler(collisionHandler);
 
         collisionHandler.setUpCollision();
-
-        playerRenderer.setUpPlayer(assetManager);
 
         mapRenderer.setUpLight();
         mapRenderer.setUpMap();
 
         movementHandler.setUpKeys(inputManager);
-        movementHandler.setUpPlayer();
+        movementHandler.setUpPlayer(flyCam);
 
         physicsControler = new PhysicsControler(bulletAppState, movementHandler, mapRenderer);
         physicsControler.setUpPhysics(stateManager, rootNode, assetManager, viewPort, flyCam);
@@ -53,11 +50,12 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        movementHandler.move(cam, movementHandler.getPlayer());
+        movementHandler.move(cam);
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
+        
     }
 
 }

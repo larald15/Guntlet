@@ -6,7 +6,7 @@
 package handler.movement;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -14,9 +14,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Node;
 import handler.collision.CollisionHandler;
-import renderer.player.PlayerRenderer;
 
 /**
  *
@@ -24,13 +22,9 @@ import renderer.player.PlayerRenderer;
  */
 public class MovementHandler {
 
-    private BetterCharacterControl player;
-    private CollisionHandler collisionHandler;
-    private Node playerNode;
-    private FlyByCamera flyCam;
-
-    private PlayerRenderer playerRenderer;
-
+    private CharacterControl player;
+    private final CollisionHandler collisionHandler;
+    
     //Triggers
     public static final Trigger TRIGGER_LEFT = new KeyTrigger(KeyInput.KEY_A);
     public static final Trigger TRIGGER_RIGHT = new KeyTrigger(KeyInput.KEY_D);
@@ -51,28 +45,20 @@ public class MovementHandler {
     private Vector3f camLeft = new Vector3f();
 
     //Player Variables
-    private float speed;
-    private float eyeHeight;
+    private final float playerSpeed = -1f;
 
-    public MovementHandler(Node rootNode, FlyByCamera flyCam) {
-        this.flyCam = flyCam;
-        playerRenderer = new PlayerRenderer(rootNode);
-        playerNode = playerRenderer.getPlayerNode();
-    }
-
-    public void setUpPlayer() {
-        collisionHandler = new CollisionHandler();
-
-        //CapsuleCollisionShape collisionShape = collisionHandler.getCollisionShape();
+    public MovementHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
+    } 
+    
+    public void setUpPlayer(FlyByCamera flyCam) {
+        CapsuleCollisionShape collisionShape = collisionHandler.getCollisionShape();
         
-        speed = 6f;
-        eyeHeight = 5f;
+        flyCam.setMoveSpeed(playerSpeed);
 
-        flyCam.setMoveSpeed(60);
-
-        player = new BetterCharacterControl(1.5f, 6f, 1);
-        player.setGravity(new Vector3f(0, -30f, 0));
-        player.setJumpForce(new Vector3f(0, 10f, 0));
+        player = new CharacterControl(collisionShape, 0.1f);
+        player.setGravity(new Vector3f(0, -20f, 0));
+        player.warp(new Vector3f(0, 5f, 0));
     }
 
     public void setUpKeys(InputManager inputManager) {
@@ -89,7 +75,7 @@ public class MovementHandler {
         inputManager.addListener(new KeyListener(), MAPPING_JUMP);
     }
 
-    public void move(Camera cam, BetterCharacterControl player) {
+    public void move(Camera cam) {
         camDir.set(cam.getDirection()).multLocal(0.6f);
         camLeft.set(cam.getLeft()).multLocal(0.4f);
         walkDirection.set(0, 0, 0);
@@ -107,15 +93,14 @@ public class MovementHandler {
             walkDirection.addLocal(camDir.negate());
         }
         if (KeyListener.jump) {
-            player.jump();
+            player.jump(new Vector3f(0, 15f, 0));
         }
 
         player.setWalkDirection(walkDirection);
-        cam.setLocation(new Vector3f(playerNode.getLocalTranslation().x, playerNode.getLocalTranslation().y,
-                playerNode.getLocalTranslation().z));
+        cam.setLocation(player.getPhysicsLocation());
     }
 
-    public BetterCharacterControl getPlayer() {
+    public CharacterControl getPlayer() {
         return player;
     }
 

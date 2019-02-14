@@ -5,14 +5,11 @@
  */
 package renderer.map;
 
-import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ZipLocator;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.input.FlyByCamera;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
@@ -20,7 +17,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import controller.physics.PhysicsControler;
 
 /**
  *
@@ -28,14 +24,9 @@ import controller.physics.PhysicsControler;
  */
 public class MapRenderer {
 
-    private PhysicsControler physicsControler;
-
-    private Node rootNode;
-    private AssetManager assetManager;
-    private ViewPort viewPort;
-    private BulletAppState bulletAppState;
-    private AppStateManager stateManager;
-    private FlyByCamera flyCam;
+    private final Node rootNode;
+    private final AssetManager assetManager;
+    private final ViewPort viewPort;
 
     private Spatial sceneModel;
     private RigidBodyControl landscape;
@@ -50,6 +41,7 @@ public class MapRenderer {
         assetManager.registerLocator("town.zip", ZipLocator.class);
         sceneModel = assetManager.loadModel("main.scene");
         sceneModel.setLocalScale(2f);
+        sceneModel.setLocalTranslation(0, 0f, 0);
 
         //Map Collision
         CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(sceneModel);
