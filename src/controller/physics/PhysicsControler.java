@@ -23,19 +23,20 @@ public class PhysicsControler {
     private BulletAppState bulletAppState;
     private MapRenderer mapRenderer;
     private MovementHandler movementHandler;
-    
+
     public PhysicsControler(BulletAppState bulletAppState, MovementHandler movementHandler, MapRenderer mapRenderer) {
         this.bulletAppState = bulletAppState;
         this.mapRenderer = mapRenderer;
         this.movementHandler = movementHandler;
     }
-    
-    public void setUpPhysics(AppStateManager stateManager, Node rootNode, AssetManager assetManager, ViewPort viewPort, FlyByCamera flyCam) {        
+
+    public void setUpPhysics(AppStateManager stateManager, Node rootNode, AssetManager assetManager, ViewPort viewPort, FlyByCamera flyCam) {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        
+
         bulletAppState.getPhysicsSpace().add(mapRenderer.getLandscape());
         bulletAppState.getPhysicsSpace().add(movementHandler.getPlayer());
+        bulletAppState.startPhysics();
     }
 
 }

@@ -20,8 +20,8 @@ public class Main extends SimpleApplication {
     private MovementHandler movementHandler;
     private MapRenderer mapRenderer;
     private PhysicsControler physicsControler;
-    private PlayerRenderer playerRenderer;
     private CollisionHandler collisionHandler;
+    private PlayerRenderer playerRenderer;
 
     private BulletAppState bulletAppState;
 
@@ -34,7 +34,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         mapRenderer = new MapRenderer(rootNode, assetManager, viewPort);
         collisionHandler = new CollisionHandler();
-        movementHandler = new MovementHandler(collisionHandler);
+        movementHandler = new MovementHandler(collisionHandler, rootNode, assetManager, cam);
 
         collisionHandler.setUpCollision();
 
@@ -46,16 +46,20 @@ public class Main extends SimpleApplication {
 
         physicsControler = new PhysicsControler(bulletAppState, movementHandler, mapRenderer);
         physicsControler.setUpPhysics(stateManager, rootNode, assetManager, viewPort, flyCam);
+
+        playerRenderer = new PlayerRenderer(rootNode);
+        playerRenderer.setUpGirl(assetManager);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         movementHandler.move(cam);
+        //movementHandler.prevent360(cam);
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        
+
     }
 
 }

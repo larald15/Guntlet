@@ -6,6 +6,7 @@
 package handler.collision;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import data.PlayerData;
 
 /**
  *
@@ -14,13 +15,9 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 public class CollisionHandler {
 
     private CapsuleCollisionShape collisionShape;
-    
-    private final float playerRadius = 1.5f;
-    private final float playerHeight = 6f;
-    private final int playerAxis = 1;
-    
+
     public void setUpCollision() {
-        collisionShape = new CapsuleCollisionShape(playerRadius, playerHeight, playerAxis);
+        collisionShape = new CapsuleCollisionShape(PlayerData.RADIUS, PlayerData.HEIGHT, PlayerData.AXIS);
     }
 
     public CapsuleCollisionShape getCollisionShape() {
