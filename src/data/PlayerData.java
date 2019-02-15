@@ -16,7 +16,7 @@ public class PlayerData {
     public static final float STRAFE_SPEED = SPEED;
     public static final float SPRINT_SPEED = 0.8f;
     public static final float SPRINT_STRAFE_SPEED = SPRINT_SPEED;
-    public static final float GRAVITY = -30f;
+    public static final float GRAVITY = -35f;
     public static final float JUMP_FORCE = 15f;
     public static final float STEP_HEIGHT = 0.1f;
     public static final float MASS = 1f;
@@ -27,4 +27,7 @@ public class PlayerData {
     public static final float EYEHEIGHT = 3f;
     public static final int AXIS = 1;
 
+    //Stats
+    public static int HEALTH = 100;
+    
 }

@@ -31,12 +31,11 @@ public class PhysicsControler {
     }
 
     public void setUpPhysics(AppStateManager stateManager, Node rootNode, AssetManager assetManager, ViewPort viewPort, FlyByCamera flyCam) {
-        bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
         bulletAppState.getPhysicsSpace().add(mapRenderer.getLandscape());
         bulletAppState.getPhysicsSpace().add(movementHandler.getPlayer());
         bulletAppState.startPhysics();
     }
-
+    
 }

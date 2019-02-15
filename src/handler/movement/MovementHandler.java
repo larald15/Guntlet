@@ -12,7 +12,9 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -34,7 +36,12 @@ public class MovementHandler {
     private final PlayerRenderer playerRenderer;
     private Geometry playerModel;
 
-    //Triggers
+    //temporary variables
+    private Vector3f walkDirection = new Vector3f();
+    private Vector3f camDir = new Vector3f();
+    private Vector3f camLeft = new Vector3f();
+    
+    //Key Triggers
     public static final Trigger TRIGGER_LEFT = new KeyTrigger(KeyInput.KEY_A);
     public static final Trigger TRIGGER_RIGHT = new KeyTrigger(KeyInput.KEY_D);
     public static final Trigger TRIGGER_FORWARD = new KeyTrigger(KeyInput.KEY_W);
@@ -42,18 +49,13 @@ public class MovementHandler {
     public static final Trigger TRIGGER_JUMP = new KeyTrigger(KeyInput.KEY_SPACE);
     public static final Trigger TRIGGER_SPRINT = new KeyTrigger(KeyInput.KEY_LSHIFT);
 
-    //Mappings
+    //Key Mappings
     public static final String MAPPING_LEFT = "Left";
     public static final String MAPPING_RIGHT = "Right";
     public static final String MAPPING_FORWARDS = "Forward";
     public static final String MAPPING_BACKWARDS = "Backward";
     public static final String MAPPING_JUMP = "Jump";
     public static final String MAPPING_SPRINT = "Sprint";
-
-    //temporary variables
-    private Vector3f walkDirection = new Vector3f();
-    private Vector3f camDir = new Vector3f();
-    private Vector3f camLeft = new Vector3f();
 
     public MovementHandler(CollisionHandler collisionHandler, Node rootNode, AssetManager assetManager, Camera cam) {
         this.collisionHandler = collisionHandler;
@@ -74,6 +76,7 @@ public class MovementHandler {
     }
 
     public void setUpKeys(InputManager inputManager) {
+        //Keyboard
         inputManager.addMapping(MAPPING_LEFT, TRIGGER_LEFT);
         inputManager.addMapping(MAPPING_RIGHT, TRIGGER_RIGHT);
         inputManager.addMapping(MAPPING_FORWARDS, TRIGGER_FORWARD);
