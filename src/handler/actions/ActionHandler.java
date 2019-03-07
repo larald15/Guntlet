@@ -12,6 +12,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -28,9 +29,9 @@ public class ActionHandler {
     private AssetManager assetManager;
     private Camera cam;
     private Node rootNode;
-    
+
     private BulletAppState bulletAppState;
-    
+
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     public static final Trigger Trigger_RIGHT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_RIGHT);
@@ -44,10 +45,10 @@ public class ActionHandler {
         this.cam = cam;
         this.bulletAppState = bulletAppState;
         this.rootNode = rootNode;
-        
+
         bulletRenderer = new BulletRenderer();
     }
-    
+
     public void setUpKeys(InputManager inputManager) {
         //Mouse
         inputManager.addMapping(MAPPING_LEFT_CLICK, Trigger_LEFT_CLICK);
@@ -66,14 +67,16 @@ public class ActionHandler {
     private void shootBullet() {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
         bullet.setLocalTranslation(cam.getLocation());
-        
+
         rootNode.attachChild(bullet);
-        
+
         RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
-        
+
         bullet.addControl(bullet_physics);
         bulletAppState.getPhysicsSpace().add(bullet_physics);
-        bullet_physics.setLinearVelocity(cam.getDirection().mult(25));
+
+        bullet_physics.setLinearVelocity(cam.getDirection().mult(100));
+        //bullet_physics.applyImpulse(cam.getDirection().mult(75), cam.getLocation());
     }
-    
+
 }

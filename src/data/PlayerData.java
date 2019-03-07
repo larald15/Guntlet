@@ -29,5 +29,5 @@ public class PlayerData {
 
     //Stats
     public static int HEALTH = 100;
-    
+
 }

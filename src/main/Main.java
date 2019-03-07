@@ -7,7 +7,6 @@ import controller.physics.PhysicsControler;
 import handler.actions.ActionHandler;
 import handler.collision.CollisionHandler;
 import handler.movement.MovementHandler;
-import renderer.bullet.BulletRenderer;
 import renderer.interfaces.InterfaceRenderer;
 import renderer.map.MapRenderer;
 import renderer.player.PlayerRenderer;
@@ -27,7 +26,7 @@ public class Main extends SimpleApplication {
     private PlayerRenderer playerRenderer;
     private InterfaceRenderer interfaceRenderer;
     private ActionHandler actionHandler;
-    
+
     private BulletAppState bulletAppState = new BulletAppState();
 
     public static void main(String[] args) {
@@ -54,23 +53,23 @@ public class Main extends SimpleApplication {
 
         playerRenderer = new PlayerRenderer(rootNode);
         playerRenderer.setUpGirl(assetManager);
-        
+
         interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, guiFont, settings, guiNode);
         interfaceRenderer.renderCrosshair();
-        
+
         actionHandler = new ActionHandler(assetManager, cam, bulletAppState, rootNode);
         actionHandler.setUpKeys(inputManager);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
+        System.out.println(tpf);
         movementHandler.move(cam);
         actionHandler.action();
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-
     }
 
 }

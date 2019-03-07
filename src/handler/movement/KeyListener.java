@@ -14,8 +14,8 @@ import com.jme3.input.controls.ActionListener;
 public class KeyListener implements ActionListener {
 
     public static boolean left = false;
-    public static boolean right = false; 
-    public static boolean forwards = false; 
+    public static boolean right = false;
+    public static boolean forwards = false;
     public static boolean backwards = false;
     public static boolean jump = false;
     public static boolean sprint = false;

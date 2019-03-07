@@ -37,5 +37,5 @@ public class PhysicsControler {
         bulletAppState.getPhysicsSpace().add(movementHandler.getPlayer());
         bulletAppState.startPhysics();
     }
-    
+
 }

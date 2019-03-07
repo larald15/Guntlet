@@ -7,14 +7,11 @@ package handler.movement;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -40,7 +37,7 @@ public class MovementHandler {
     private Vector3f walkDirection = new Vector3f();
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
-    
+
     //Key Triggers
     public static final Trigger TRIGGER_LEFT = new KeyTrigger(KeyInput.KEY_A);
     public static final Trigger TRIGGER_RIGHT = new KeyTrigger(KeyInput.KEY_D);

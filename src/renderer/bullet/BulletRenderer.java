@@ -10,7 +10,6 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
-import data.PlayerData;
 
 /**
  *
@@ -19,13 +18,13 @@ import data.PlayerData;
 public class BulletRenderer {
 
     public Geometry renderBullet(AssetManager assetManager) {
-        Sphere bulletSphere = new Sphere(20, 20, 0.2f);
+        Sphere bulletSphere = new Sphere(20, 20, 0.3f);
         Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        material.setColor("Color", ColorRGBA.Gray);
-        
+        material.setColor("Color", ColorRGBA.randomColor());
+
         Geometry bulletGeometry = new Geometry("Bullet Sphere", bulletSphere);
         bulletGeometry.setMaterial(material);
-        
+
         return bulletGeometry;
     }
 
