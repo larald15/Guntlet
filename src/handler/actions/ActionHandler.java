@@ -12,7 +12,6 @@ import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -66,7 +65,7 @@ public class ActionHandler {
 
     private void shootBullet() {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
-        bullet.setLocalTranslation(cam.getLocation());
+        bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
         rootNode.attachChild(bullet);
 

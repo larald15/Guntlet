@@ -64,7 +64,6 @@ public class MovementHandler {
     public void setUpPlayer(FlyByCamera flyCam) {
         CapsuleCollisionShape collisionShape = collisionHandler.getCollisionShape();
 
-        //flyCam.setEnabled(false);
         player = new PlayerControl(collisionShape, PlayerData.STEP_HEIGHT);
         playerModel.addControl(player);
 
