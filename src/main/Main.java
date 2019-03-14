@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         movementHandler.move(cam);
-        actionHandler.action();
+        actionHandler.action(tpf);
     }
 
     @Override

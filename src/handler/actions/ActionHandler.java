@@ -15,7 +15,11 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.system.Timer;
 import handler.movement.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 import renderer.bullet.BulletRenderer;
 
 /**
@@ -30,6 +34,9 @@ public class ActionHandler {
     private Node rootNode;
 
     private BulletAppState bulletAppState;
+    
+    private float fireRate = 0.1f;
+    private float fireTimer = fireRate;
 
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
@@ -38,6 +45,8 @@ public class ActionHandler {
     //Mouse Mappings
     public static final String MAPPING_LEFT_CLICK = "Left Click";
     public static final String MAPPING_RIGHT_CLICK = "Right Click";
+    
+    public Node bulletNode = new Node();
 
     public ActionHandler(AssetManager assetManager, Camera cam, BulletAppState bulletAppState, Node rootNode) {
         this.assetManager = assetManager;
@@ -57,20 +66,22 @@ public class ActionHandler {
         inputManager.addListener(new MouseListener(), MAPPING_RIGHT_CLICK);
     }
 
-    public void action() {
-        if (MouseListener.left_click) {
-            shootBullet();
+    public void action(float tpf) {
+        if(fireTimer <= 0){
+            if (MouseListener.left_click) {
+                shootBullet();
+                fireTimer = fireRate;
+            }
         }
+        fireTimer -= tpf;
     }
 
     private void shootBullet() {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
         bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
-        Node bulletNode = new Node();
-        bulletNode.attachChild(bullet);
-        
         rootNode.attachChild(bulletNode);
+        bulletNode.attachChild(bullet);
 
         RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
 
@@ -78,6 +89,7 @@ public class ActionHandler {
         bulletAppState.getPhysicsSpace().add(bullet_physics);
 
         bullet_physics.setLinearVelocity(cam.getDirection().mult(100));
+        //bullet_physics.applyImpulse(cam.getDirection().mult(75), cam.getLocation());
     }
-
+    
 }
