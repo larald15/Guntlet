@@ -4,6 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import controller.physics.PhysicsControler;
+import controller.player.BetterFlyCam;
 import handler.actions.ActionHandler;
 import handler.collision.CollisionHandler;
 import handler.movement.MovementHandler;
@@ -36,6 +37,9 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        flyCam.setZoomSpeed(0);
+        flyCam = new BetterFlyCam(cam);
+
         mapRenderer = new MapRenderer(rootNode, assetManager, viewPort);
         collisionHandler = new CollisionHandler();
         movementHandler = new MovementHandler(collisionHandler, rootNode, assetManager, cam);
@@ -63,7 +67,6 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        System.out.println(tpf);
         movementHandler.move(cam);
         actionHandler.action();
     }

@@ -8,6 +8,7 @@ package handler.movement;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -20,6 +21,7 @@ import com.jme3.scene.Node;
 import controller.player.PlayerControl;
 import data.PlayerData;
 import handler.collision.CollisionHandler;
+import renderer.map.MapRenderer;
 import renderer.player.PlayerRenderer;
 
 /**
@@ -32,6 +34,7 @@ public class MovementHandler {
     private final CollisionHandler collisionHandler;
     private final PlayerRenderer playerRenderer;
     private Geometry playerModel;
+    private Node rootNode;
 
     //temporary variables
     private Vector3f walkDirection = new Vector3f();
@@ -93,6 +96,8 @@ public class MovementHandler {
         camLeft.set(cam.getLeft()).multLocal(PlayerData.STRAFE_SPEED);
         walkDirection.set(0, 0, 0);
 
+        CollisionResults collisions = new CollisionResults();
+
         if (KeyListener.left) {
             walkDirection.addLocal(camLeft);
         }
@@ -106,22 +111,14 @@ public class MovementHandler {
             walkDirection.addLocal(camDir.negate());
         }
         if (KeyListener.jump) {
-            player.jump(new Vector3f(0, PlayerData.JUMP_FORCE, 0));
+            if (player.onGround()) {
+                player.jump(new Vector3f(0, PlayerData.JUMP_FORCE, 0));
+            }
         }
 
         player.setWalkDirection(walkDirection);
         cam.setLocation(new Vector3f(playerModel.getLocalTranslation().x, playerModel.getLocalTranslation().y + PlayerData.EYEHEIGHT,
                 playerModel.getLocalTranslation().z));
-    }
-
-    public void prevent360(Camera cam) {
-        if (cam.getDirection().y <= 0.9 && cam.getDirection().y >= -0.9) {
-            cam.setAxes(cam.getLeft(), cam.getUp(), new Vector3f(0, 0.9f, 0));
-        } else if (cam.getDirection().y >= 0.9) {
-            cam.setAxes(cam.getLeft(), cam.getUp(), new Vector3f(0, -0.9f, 0));
-        }
-
-        System.out.println(cam.getDirection().y);
     }
 
     public CharacterControl getPlayer() {

@@ -67,7 +67,10 @@ public class ActionHandler {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
         bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
-        rootNode.attachChild(bullet);
+        Node bulletNode = new Node();
+        bulletNode.attachChild(bullet);
+        
+        rootNode.attachChild(bulletNode);
 
         RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
 
@@ -75,7 +78,6 @@ public class ActionHandler {
         bulletAppState.getPhysicsSpace().add(bullet_physics);
 
         bullet_physics.setLinearVelocity(cam.getDirection().mult(100));
-        //bullet_physics.applyImpulse(cam.getDirection().mult(75), cam.getLocation());
     }
 
 }

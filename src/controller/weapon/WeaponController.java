@@ -13,5 +13,5 @@ public class WeaponController {
 
     private float delay = 0f;
     private float magSize = 30f;
-
+    
 }
