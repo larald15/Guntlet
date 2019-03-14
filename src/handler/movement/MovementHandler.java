@@ -21,7 +21,6 @@ import com.jme3.scene.Node;
 import controller.player.PlayerControl;
 import data.PlayerData;
 import handler.collision.CollisionHandler;
-import renderer.map.MapRenderer;
 import renderer.player.PlayerRenderer;
 
 /**
