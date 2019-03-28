@@ -8,12 +8,12 @@ package handler.movement;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
@@ -34,6 +34,7 @@ public class MovementHandler {
     private final PlayerRenderer playerRenderer;
     private Geometry playerModel;
     private Node rootNode;
+    private Camera cam;
 
     //temporary variables
     private Vector3f walkDirection = new Vector3f();
@@ -58,6 +59,7 @@ public class MovementHandler {
 
     public MovementHandler(CollisionHandler collisionHandler, Node rootNode, AssetManager assetManager, Camera cam) {
         this.collisionHandler = collisionHandler;
+        this.cam = cam;
         playerRenderer = new PlayerRenderer(rootNode);
 
         playerModel = playerRenderer.setUpPlayer(assetManager, cam);
@@ -95,20 +97,38 @@ public class MovementHandler {
         camLeft.set(cam.getLeft()).multLocal(PlayerData.STRAFE_SPEED);
         walkDirection.set(0, 0, 0);
 
-        CollisionResults collisions = new CollisionResults();
+        if (!KeyListener.sprint) {
+            if (KeyListener.left) {
+                walkDirection.addLocal(camLeft);
+            }
+            if (KeyListener.right) {
+                walkDirection.addLocal(camLeft.negate());
+            }
+            if (KeyListener.forwards) {
+                walkDirection.addLocal(camDir);
+            }
+            if (KeyListener.backwards) {
+                walkDirection.addLocal(camDir.negate());
+            }
+        } else {
+            camDir.set(cam.getDirection().multLocal(PlayerData.SPRINT_SPEED, 0.0f, PlayerData.SPRINT_SPEED));
+            camLeft.set(cam.getLeft().multLocal(PlayerData.STRAFE_SPEED));
+            walkDirection.set(0, 0, 0);
 
-        if (KeyListener.left) {
-            walkDirection.addLocal(camLeft);
+            if (KeyListener.left) {
+                walkDirection.addLocal(camLeft);
+            }
+            if (KeyListener.right) {
+                walkDirection.addLocal(camLeft.negate());
+            }
+            if (KeyListener.forwards) {
+                walkDirection.addLocal(camDir);
+            }
+            if (KeyListener.backwards) {
+                walkDirection.addLocal(camDir.negate());
+            }
         }
-        if (KeyListener.right) {
-            walkDirection.addLocal(camLeft.negate());
-        }
-        if (KeyListener.forwards) {
-            walkDirection.addLocal(camDir);
-        }
-        if (KeyListener.backwards) {
-            walkDirection.addLocal(camDir.negate());
-        }
+
         if (KeyListener.jump) {
             if (player.onGround()) {
                 player.jump(new Vector3f(0, PlayerData.JUMP_FORCE, 0));
@@ -118,6 +138,11 @@ public class MovementHandler {
         player.setWalkDirection(walkDirection);
         cam.setLocation(new Vector3f(playerModel.getLocalTranslation().x, playerModel.getLocalTranslation().y + PlayerData.EYEHEIGHT,
                 playerModel.getLocalTranslation().z));
+    }
+
+    public void prevent360(Camera cam) {
+        cam.setAxes(cam.getLeft().setY(0), cam.getUp(),
+                cam.getDirection().set(cam.getDirection().x, FastMath.clamp(cam.getDirection().y, -0.9f, 0.9f), cam.getDirection().z));
     }
 
     public CharacterControl getPlayer() {

@@ -5,6 +5,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import controller.physics.PhysicsControler;
 import controller.player.BetterFlyCam;
+import controller.weapon.WeaponControler;
 import handler.actions.ActionHandler;
 import handler.collision.CollisionHandler;
 import handler.movement.MovementHandler;
@@ -27,6 +28,7 @@ public class Main extends SimpleApplication {
     private PlayerRenderer playerRenderer;
     private InterfaceRenderer interfaceRenderer;
     private ActionHandler actionHandler;
+    private WeaponControler weaponControler;
 
     private BulletAppState bulletAppState = new BulletAppState();
 
@@ -57,18 +59,24 @@ public class Main extends SimpleApplication {
 
         playerRenderer = new PlayerRenderer(rootNode);
         playerRenderer.setUpGirl(assetManager);
+        playerRenderer.setUpPanzer(assetManager);
 
         interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, guiFont, settings, guiNode);
         interfaceRenderer.renderCrosshair();
 
-        actionHandler = new ActionHandler(assetManager, cam, bulletAppState, rootNode);
+        actionHandler = new ActionHandler(assetManager, cam, physicsControler, rootNode);
         actionHandler.setUpKeys(inputManager);
+        
+        weaponControler = new WeaponControler(rootNode);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         movementHandler.move(cam);
         actionHandler.action(tpf);
+        movementHandler.prevent360(cam);
+        
+        weaponControler.deleteBullets(tpf);
     }
 
     @Override

@@ -54,4 +54,13 @@ public class PlayerRenderer {
         rootNode.attachChild(girl);
     }
 
+    public void setUpPanzer(AssetManager assetManager) {
+        Spatial panzer = assetManager.loadModel("Models/Panzer/IS4.j3o");
+        panzer.setLocalTranslation(0, 1, -17);
+        panzer.scale(2);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        panzer.setMaterial(mat);
+        rootNode.attachChild(panzer);
+    }
+
 }

@@ -29,7 +29,7 @@ public class BetterFlyCam extends FlyByCamera {
                 return;
             }
         }
-        
+
         Matrix3f mat = new Matrix3f();
         mat.fromAngleNormalAxis(rotationSpeed * value, axis);
 
@@ -44,7 +44,7 @@ public class BetterFlyCam extends FlyByCamera {
         if (up.getY() < 0) {
             return;
         }
-        
+
         Quaternion q = new Quaternion();
         q.fromAxes(left, up, dir);
         q.normalizeLocal();
