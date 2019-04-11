@@ -25,7 +25,7 @@ public class PlayerRenderer {
     private final Node rootNode;
 
     private Vector3f spawnCoordinates = new Vector3f(0, 1, 0);
-
+    
     public PlayerRenderer(Node rootNode) {
         this.rootNode = rootNode;
     }
@@ -50,17 +50,28 @@ public class PlayerRenderer {
         girl.setLocalTranslation(0, 1, -15);
         girl.scale(5);
         Material defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        //defaultMaterial.setTexture("ColorMap", assetManager.loadTexture("Models/Girl/tartan.png"));
         girl.setMaterial(defaultMaterial);
         rootNode.attachChild(girl);
     }
 
     public void setUpPanzer(AssetManager assetManager) {
-        Spatial panzer = assetManager.loadModel("Models/Panzer/IS4.j3o");
+        Spatial panzer = assetManager.loadModel("Models/Panzer/IS4.blend");
         panzer.setLocalTranslation(0, 1, -17);
         panzer.scale(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", assetManager.loadTexture("Models/Girl/stripes.png"));
         panzer.setMaterial(mat);
         rootNode.attachChild(panzer);
     }
 
+    public void setUpCar(AssetManager assetManager) {
+        Spatial lambo = assetManager.loadModel("Models/Bugatti/bugatti.blend");
+        lambo.setLocalTranslation(0, 1, 10);
+        lambo.scale(2);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        lambo.setMaterial(mat);
+        rootNode.attachChild(lambo);
+    }
+    
 }

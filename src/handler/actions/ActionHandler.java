@@ -6,8 +6,9 @@
 package handler.actions;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -16,6 +17,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import controller.physics.PhysicsControler;
+import controller.weapon.WeaponControler;
 import handler.movement.MouseListener;
 import renderer.bullet.BulletRenderer;
 
@@ -31,11 +33,12 @@ public class ActionHandler {
     private Node rootNode;
 
     private PhysicsControler physicsControler;
+    private WeaponControler weaponControler;
 
-    private CollisionResults collisionResults = new CollisionResults();
-
-    private float fireRate = 0.15f;
+    private final float fireRate = 0.15f;
     private float fireTimer = fireRate;
+    
+    private GhostControl ghost;
 
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
@@ -77,28 +80,17 @@ public class ActionHandler {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
         bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
-        rootNode.attachChild(bullet);
-
+        ghost = new GhostControl(new SphereCollisionShape(0.2f));
         RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
 
         bullet.addControl(bullet_physics);
+        bullet.addControl(ghost);
+
+        rootNode.attachChild(bullet);
         physicsControler.addPhysicsObject(bullet);
+        physicsControler.addPhysicsObject(ghost);
 
         bullet_physics.setLinearVelocity(cam.getDirection().mult(650));
-        //bullet_physics.setLinearVelocity(cam.getDirection().mult(50));
-
-        /* Check for hit
-        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        rootNode.collideWith(ray, collisionResults);
-
-        System.out.println(collisionResults.getClosestCollision().getGeometry().toString());
-
-        
-        CollisionResult firstHit = collisionResults.getClosestCollision();
-        Geometry hitmarker = bulletRenderer.renderHitMarker(assetManager);
-        hitmarker.setLocalTranslation(firstHit.getGeometry().getLocalTranslation());
-        rootNode.attachChild(hitmarker);
-         */
     }
-
+    
 }

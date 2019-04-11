@@ -8,10 +8,13 @@ package controller.physics;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.objects.PhysicsGhostObject;
 import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import handler.movement.MovementHandler;
+import java.util.Collection;
 import renderer.map.MapRenderer;
 
 /**
@@ -42,4 +45,8 @@ public class PhysicsControler {
         bulletAppState.getPhysicsSpace().add(obj);
     }
 
+    public Collection<PhysicsGhostObject> getGhostObjects() {
+        return bulletAppState.getPhysicsSpace().getGhostObjectList();
+    }
+    
 }

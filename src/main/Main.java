@@ -60,14 +60,15 @@ public class Main extends SimpleApplication {
         playerRenderer = new PlayerRenderer(rootNode);
         playerRenderer.setUpGirl(assetManager);
         playerRenderer.setUpPanzer(assetManager);
+        //playerRenderer.setUpCar(assetManager);
 
         interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, guiFont, settings, guiNode);
         interfaceRenderer.renderCrosshair();
 
         actionHandler = new ActionHandler(assetManager, cam, physicsControler, rootNode);
         actionHandler.setUpKeys(inputManager);
-        
-        weaponControler = new WeaponControler(rootNode);
+
+        weaponControler = new WeaponControler(rootNode, physicsControler);
     }
 
     @Override
@@ -75,12 +76,14 @@ public class Main extends SimpleApplication {
         movementHandler.move(cam);
         actionHandler.action(tpf);
         movementHandler.prevent360(cam);
-        
-        weaponControler.deleteBullets(tpf);
+
+        weaponControler.deleteBulletsAfterTime(tpf);
+        weaponControler.deleteSingleBullet();
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
+        
     }
 
 }

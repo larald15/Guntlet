@@ -17,12 +17,15 @@ import com.jme3.scene.shape.Sphere;
  */
 public class BulletRenderer {
 
+    public int counter = 0;
+    
     public Geometry renderBullet(AssetManager assetManager) {
         Sphere bulletSphere = new Sphere(20, 20, 0.20f);
         Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", ColorRGBA.Black);
         
-        Geometry bulletGeometry = new Geometry("Bullet Sphere", bulletSphere);
+        Geometry bulletGeometry = new Geometry("Bullet Sphere" + counter, bulletSphere);
+        counter++;
         bulletGeometry.setMaterial(material);
 
         return bulletGeometry;
