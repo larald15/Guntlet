@@ -40,7 +40,7 @@ public class PhysicsControler {
         bulletAppState.getPhysicsSpace().add(movementHandler.getPlayer());
         bulletAppState.startPhysics();
     }
-    
+
     public void addPhysicsObject(Object obj) {
         bulletAppState.getPhysicsSpace().add(obj);
     }
@@ -48,5 +48,5 @@ public class PhysicsControler {
     public Collection<PhysicsGhostObject> getGhostObjects() {
         return bulletAppState.getPhysicsSpace().getGhostObjectList();
     }
-    
+
 }

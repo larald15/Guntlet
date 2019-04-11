@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
         actionHandler = new ActionHandler(assetManager, cam, physicsControler, rootNode);
         actionHandler.setUpKeys(inputManager);
 
-        weaponControler = new WeaponControler(rootNode, physicsControler);
+        weaponControler = new WeaponControler(rootNode, actionHandler, movementHandler);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-        
+
     }
 
 }

@@ -19,6 +19,7 @@ import com.jme3.scene.Node;
 import controller.physics.PhysicsControler;
 import controller.weapon.WeaponControler;
 import handler.movement.MouseListener;
+import java.util.ArrayList;
 import renderer.bullet.BulletRenderer;
 
 /**
@@ -37,8 +38,8 @@ public class ActionHandler {
 
     private final float fireRate = 0.15f;
     private float fireTimer = fireRate;
-    
-    private GhostControl ghost;
+
+    public ArrayList<Geometry> bulletList = new ArrayList<>();
 
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
@@ -80,7 +81,7 @@ public class ActionHandler {
         Geometry bullet = bulletRenderer.renderBullet(assetManager);
         bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
-        ghost = new GhostControl(new SphereCollisionShape(0.2f));
+        GhostControl ghost = new GhostControl(new SphereCollisionShape(0.2f));
         RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
 
         bullet.addControl(bullet_physics);
@@ -90,7 +91,12 @@ public class ActionHandler {
         physicsControler.addPhysicsObject(bullet);
         physicsControler.addPhysicsObject(ghost);
 
-        bullet_physics.setLinearVelocity(cam.getDirection().mult(650));
+        bullet_physics.setLinearVelocity(cam.getDirection().mult(50));
+        bulletList.add(bullet);
     }
-    
+
+    public ArrayList<Geometry> getBulletList() {
+        return bulletList;
+    }
+
 }

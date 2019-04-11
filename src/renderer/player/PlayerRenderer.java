@@ -25,7 +25,7 @@ public class PlayerRenderer {
     private final Node rootNode;
 
     private Vector3f spawnCoordinates = new Vector3f(0, 1, 0);
-    
+
     public PlayerRenderer(Node rootNode) {
         this.rootNode = rootNode;
     }
@@ -73,5 +73,5 @@ public class PlayerRenderer {
         lambo.setMaterial(mat);
         rootNode.attachChild(lambo);
     }
-    
+
 }
