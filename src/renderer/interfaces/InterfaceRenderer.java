@@ -8,8 +8,10 @@ package renderer.interfaces;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
+import data.PlayerData;
 
 /**
  *
@@ -19,26 +21,34 @@ public class InterfaceRenderer {
 
     private Node rootNode;
     private AssetManager assetManager;
-    private BitmapFont guiFont;
     private AppSettings settings;
     private Node guiNode;
 
-    public InterfaceRenderer(Node rootNode, AssetManager assetManager, BitmapFont guiFont, AppSettings settings, Node guiNode) {
+    public InterfaceRenderer(Node rootNode, AssetManager assetManager, AppSettings settings, Node guiNode) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
-        this.guiFont = guiFont;
         this.settings = settings;
         this.guiNode = guiNode;
     }
 
     public void renderCrosshair() {
-        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
-        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        BitmapFont crosshairFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText ch = new BitmapText(crosshairFont, false);
+        ch.setSize(crosshairFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");
-        ch.setLocalTranslation(settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+        ch.setLocalTranslation(settings.getWidth() / 2 - crosshairFont.getCharSet().getRenderedSize() / 3 * 2,
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
 
+    public void renderHUD() {
+        BitmapFont interfaceFont = assetManager.loadFont("Interface/Fonts/Allstar.fnt");
+        BitmapText ch = new BitmapText(interfaceFont, false);
+        ch.setColor(ColorRGBA.Black);
+        ch.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
+                + "Ammo: " + PlayerData.CURRENT_AMMO);
+        ch.setLocalTranslation(20, 90, 0);
+        guiNode.attachChild(ch);
+    }
+    
 }

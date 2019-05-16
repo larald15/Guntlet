@@ -42,6 +42,9 @@ public class Main extends SimpleApplication {
         flyCam.setZoomSpeed(0);
         flyCam = new BetterFlyCam(cam);
 
+        setDisplayFps(false);
+        setDisplayStatView(false);
+
         mapRenderer = new MapRenderer(rootNode, assetManager, viewPort);
         collisionHandler = new CollisionHandler();
         movementHandler = new MovementHandler(collisionHandler, rootNode, assetManager, cam);
@@ -60,9 +63,8 @@ public class Main extends SimpleApplication {
         playerRenderer = new PlayerRenderer(rootNode);
         playerRenderer.setUpGirl(assetManager);
         playerRenderer.setUpPanzer(assetManager);
-        //playerRenderer.setUpCar(assetManager);
 
-        interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, guiFont, settings, guiNode);
+        interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, settings, guiNode);
         interfaceRenderer.renderCrosshair();
 
         actionHandler = new ActionHandler(assetManager, cam, physicsControler, rootNode);
@@ -83,7 +85,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-
+        interfaceRenderer.renderHUD();
     }
 
 }

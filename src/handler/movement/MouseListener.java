@@ -16,6 +16,7 @@ public class MouseListener implements ActionListener {
 
     public static boolean left_click = false;
     public static boolean right_click = false;
+    public static boolean reload = false;
 
     public static float time;
 
@@ -25,6 +26,8 @@ public class MouseListener implements ActionListener {
             left_click = isPressed;
         } else if (name.equals(ActionHandler.MAPPING_RIGHT_CLICK)) {
             right_click = isPressed;
+        } else if(name.equals(ActionHandler.MAPPING_RELOAD)) {
+            reload = isPressed;
         }
     }
 
