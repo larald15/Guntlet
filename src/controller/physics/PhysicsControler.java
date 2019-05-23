@@ -8,7 +8,6 @@ package controller.physics;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.objects.PhysicsGhostObject;
 import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.ViewPort;

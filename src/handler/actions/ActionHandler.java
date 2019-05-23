@@ -10,7 +10,9 @@ import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.renderer.Camera;
@@ -18,8 +20,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import controller.physics.PhysicsControler;
 import controller.weapon.WeaponControler;
+import data.PlayerData;
+import handler.movement.KeyListener;
 import handler.movement.MouseListener;
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import renderer.bullet.BulletRenderer;
 
 /**
@@ -33,13 +38,16 @@ public class ActionHandler {
     private Camera cam;
     private Node rootNode;
 
+    private Node bulletNodes = new Node();
+
     private PhysicsControler physicsControler;
     private WeaponControler weaponControler;
 
     private final float fireRate = 0.15f;
     private float fireTimer = fireRate;
 
-    public ArrayList<Geometry> bulletList = new ArrayList<>();
+    private boolean reloadPause = false;
+    private boolean bulletReadyToDelete = false;
 
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
@@ -48,6 +56,12 @@ public class ActionHandler {
     //Mouse Mappings
     public static final String MAPPING_LEFT_CLICK = "Left Click";
     public static final String MAPPING_RIGHT_CLICK = "Right Click";
+
+    //Key Triggers
+    public static final Trigger Trigger_RELOAD = new KeyTrigger(KeyInput.KEY_R);
+
+    //Key Mappings
+    public static final String MAPPING_RELOAD = "Reload";
 
     public ActionHandler(AssetManager assetManager, Camera cam, PhysicsControler physicsControler, Node rootNode) {
         this.assetManager = assetManager;
@@ -65,38 +79,73 @@ public class ActionHandler {
 
         inputManager.addListener(new MouseListener(), MAPPING_LEFT_CLICK);
         inputManager.addListener(new MouseListener(), MAPPING_RIGHT_CLICK);
+
+        //Keyboard
+        inputManager.addMapping(MAPPING_RELOAD, Trigger_RELOAD);
+
+        inputManager.addListener(new KeyListener(), MAPPING_RELOAD);
     }
 
     public void action(float tpf) {
-        if (fireTimer <= 0) {
+        if (fireTimer <= 0 && !reloadPause) {
             if (MouseListener.left_click) {
                 shootBullet();
                 fireTimer = fireRate;
+            }
+            if (KeyListener.reload) {
+                //Animation
+                reload();
             }
         }
         fireTimer -= tpf;
     }
 
     private void shootBullet() {
-        Geometry bullet = bulletRenderer.renderBullet(assetManager);
-        bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
+        if (PlayerData.CURRENT_AMMO > 0) {
+            Geometry bullet = bulletRenderer.renderBullet(assetManager);
+            bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
-        GhostControl ghost = new GhostControl(new SphereCollisionShape(0.2f));
-        RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
+            GhostControl ghost = new GhostControl(new SphereCollisionShape(0.2f));
+            RigidBodyControl bullet_physics = new RigidBodyControl(0.5f);
 
-        bullet.addControl(bullet_physics);
-        bullet.addControl(ghost);
+            bullet.addControl(bullet_physics);
+            bullet.addControl(ghost);
 
-        rootNode.attachChild(bullet);
-        physicsControler.addPhysicsObject(bullet);
-        physicsControler.addPhysicsObject(ghost);
+            bulletNodes.attachChild(bullet);
 
-        bullet_physics.setLinearVelocity(cam.getDirection().mult(50));
-        bulletList.add(bullet);
+            rootNode.attachChild(bulletNodes);
+            physicsControler.addPhysicsObject(bullet);
+            physicsControler.addPhysicsObject(ghost);
+
+            bullet_physics.setLinearVelocity(cam.getDirection().mult(300));
+
+            PlayerData.CURRENT_AMMO--;
+        } else {
+            reload();
+        }
     }
 
-    public ArrayList<Geometry> getBulletList() {
-        return bulletList;
+    private void reload() {
+        reloadPause = true;
+
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                PlayerData.CURRENT_AMMO = PlayerData.MAX_AMMO;
+                reloadPause = false;
+                bulletReadyToDelete = true;
+            }
+        }, 2500);
+    }
+
+    public void deleteBulletsAfterTime() {
+        if (bulletReadyToDelete) {
+            bulletNodes.detachAllChildren();
+
+            bulletReadyToDelete = false;
+        }
     }
 
 }

@@ -10,5 +10,5 @@ package controller.weapon;
  * @author Larsen
  */
 class Geomtry {
-    
+
 }
