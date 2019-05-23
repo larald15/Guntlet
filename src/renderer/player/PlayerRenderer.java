@@ -62,16 +62,5 @@ public class PlayerRenderer {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Models/Girl/stripes.png"));
         panzer.setMaterial(mat);
-        rootNode.attachChild(panzer);
     }
-
-    public void setUpCar(AssetManager assetManager) {
-        Spatial lambo = assetManager.loadModel("Models/Bugatti/bugatti.blend");
-        lambo.setLocalTranslation(0, 1, 10);
-        lambo.scale(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        lambo.setMaterial(mat);
-        rootNode.attachChild(lambo);
-    }
-
 }

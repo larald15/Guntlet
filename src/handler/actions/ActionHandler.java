@@ -12,6 +12,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.renderer.Camera;
@@ -20,8 +21,10 @@ import com.jme3.scene.Node;
 import controller.physics.PhysicsControler;
 import controller.weapon.WeaponControler;
 import data.PlayerData;
+import handler.movement.KeyListener;
 import handler.movement.MouseListener;
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import renderer.bullet.BulletRenderer;
 
 /**
@@ -35,22 +38,29 @@ public class ActionHandler {
     private Camera cam;
     private Node rootNode;
 
+    private Node bulletNodes = new Node();
+
     private PhysicsControler physicsControler;
     private WeaponControler weaponControler;
 
     private final float fireRate = 0.15f;
     private float fireTimer = fireRate;
 
-    public ArrayList<Geometry> bulletList = new ArrayList<>();
+    private boolean reloadPause = false;
+    private boolean bulletReadyToDelete = false;
 
     //Mouse Triggers
     public static final Trigger Trigger_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     public static final Trigger Trigger_RIGHT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_RIGHT);
-    public static final Trigger Trigger_RELOAD = new MouseButtonTrigger(KeyInput.KEY_R);
 
     //Mouse Mappings
     public static final String MAPPING_LEFT_CLICK = "Left Click";
     public static final String MAPPING_RIGHT_CLICK = "Right Click";
+
+    //Key Triggers
+    public static final Trigger Trigger_RELOAD = new KeyTrigger(KeyInput.KEY_R);
+
+    //Key Mappings
     public static final String MAPPING_RELOAD = "Reload";
 
     public ActionHandler(AssetManager assetManager, Camera cam, PhysicsControler physicsControler, Node rootNode) {
@@ -72,17 +82,18 @@ public class ActionHandler {
 
         //Keyboard
         inputManager.addMapping(MAPPING_RELOAD, Trigger_RELOAD);
-        
-        inputManager.addListener(new MouseListener(), MAPPING_RELOAD);
+
+        inputManager.addListener(new KeyListener(), MAPPING_RELOAD);
     }
 
     public void action(float tpf) {
-        if (fireTimer <= 0) {
+        if (fireTimer <= 0 && !reloadPause) {
             if (MouseListener.left_click) {
                 shootBullet();
                 fireTimer = fireRate;
-            } else if (MouseListener.reload) {
-                //Animation + Pause Shooting
+            }
+            if (KeyListener.reload) {
+                //Animation
                 reload();
             }
         }
@@ -100,12 +111,13 @@ public class ActionHandler {
             bullet.addControl(bullet_physics);
             bullet.addControl(ghost);
 
-            rootNode.attachChild(bullet);
+            bulletNodes.attachChild(bullet);
+
+            rootNode.attachChild(bulletNodes);
             physicsControler.addPhysicsObject(bullet);
             physicsControler.addPhysicsObject(ghost);
 
-            bullet_physics.setLinearVelocity(cam.getDirection().mult(50));
-            bulletList.add(bullet);
+            bullet_physics.setLinearVelocity(cam.getDirection().mult(300));
 
             PlayerData.CURRENT_AMMO--;
         } else {
@@ -114,11 +126,26 @@ public class ActionHandler {
     }
 
     private void reload() {
-        PlayerData.CURRENT_AMMO = PlayerData.MAX_AMMO;
+        reloadPause = true;
+
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                PlayerData.CURRENT_AMMO = PlayerData.MAX_AMMO;
+                reloadPause = false;
+                bulletReadyToDelete = true;
+            }
+        }, 2500);
     }
-    
-    public ArrayList<Geometry> getBulletList() {
-        return bulletList;
+
+    public void deleteBulletsAfterTime() {
+        if (bulletReadyToDelete) {
+            bulletNodes.detachAllChildren();
+
+            bulletReadyToDelete = false;
+        }
     }
 
 }

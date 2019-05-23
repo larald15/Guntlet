@@ -24,11 +24,25 @@ public class InterfaceRenderer {
     private AppSettings settings;
     private Node guiNode;
 
+    private BitmapText hudHealthAmmo;
+
     public InterfaceRenderer(Node rootNode, AssetManager assetManager, AppSettings settings, Node guiNode) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
         this.settings = settings;
         this.guiNode = guiNode;
+        
+        initHUD();
+    }
+
+    private void initHUD() {
+        BitmapFont interfaceFont = assetManager.loadFont("Interface/Fonts/Allstar.fnt");
+        hudHealthAmmo = new BitmapText(interfaceFont, false);
+        hudHealthAmmo.setColor(ColorRGBA.Black);
+        hudHealthAmmo.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
+                + "Ammo: " + PlayerData.CURRENT_AMMO);
+        hudHealthAmmo.setLocalTranslation(20, 90, 0);
+        guiNode.attachChild(hudHealthAmmo);
     }
 
     public void renderCrosshair() {
@@ -40,15 +54,19 @@ public class InterfaceRenderer {
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
-
-    public void renderHUD() {
-        BitmapFont interfaceFont = assetManager.loadFont("Interface/Fonts/Allstar.fnt");
-        BitmapText ch = new BitmapText(interfaceFont, false);
-        ch.setColor(ColorRGBA.Black);
-        ch.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
-                + "Ammo: " + PlayerData.CURRENT_AMMO);
-        ch.setLocalTranslation(20, 90, 0);
-        guiNode.attachChild(ch);
-    }
     
+    public void refreshHUD() {
+        hudHealthAmmo.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
+                + "Ammo: " + PlayerData.CURRENT_AMMO);
+    }
+
+    public void showMessage(String text, float seconds) {
+        BitmapFont interfaceFont = assetManager.loadFont("Interface/Fonts/College.fnt");
+        BitmapText message = new BitmapText(interfaceFont);
+        message.setText(text);
+        message.setAlignment(BitmapFont.Align.Center);
+        message.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0);
+        guiNode.attachChild(message);
+    }
+
 }

@@ -79,13 +79,12 @@ public class Main extends SimpleApplication {
         actionHandler.action(tpf);
         movementHandler.prevent360(cam);
 
-        weaponControler.deleteBulletsAfterTime(tpf);
-        weaponControler.deleteSingleBullet();
+        actionHandler.deleteBulletsAfterTime();
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        interfaceRenderer.renderHUD();
+        interfaceRenderer.refreshHUD();
     }
 
 }

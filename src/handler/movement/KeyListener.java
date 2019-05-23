@@ -6,6 +6,7 @@
 package handler.movement;
 
 import com.jme3.input.controls.ActionListener;
+import handler.actions.ActionHandler;
 
 /**
  *
@@ -19,6 +20,7 @@ public class KeyListener implements ActionListener {
     public static boolean backwards = false;
     public static boolean jump = false;
     public static boolean sprint = false;
+    public static boolean reload = false;
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -34,6 +36,8 @@ public class KeyListener implements ActionListener {
             sprint = isPressed;
         } else if (name.equals(MovementHandler.MAPPING_JUMP)) {
             jump = isPressed;
+        } else if (name.equals(ActionHandler.MAPPING_RELOAD)) {
+            reload = isPressed;
         }
     }
 

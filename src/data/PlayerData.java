@@ -30,7 +30,7 @@ public class PlayerData {
     //Stats
     public static final int MAX_HEALTH = 100;
     public static final int MAX_AMMO = 20;
-    
+
     public static int CURRENT_HEALTH = 100;
     public static int CURRENT_AMMO = 20;
 
