@@ -61,8 +61,6 @@ public class Main extends SimpleApplication {
         physicsControler.setUpPhysics(stateManager, rootNode, assetManager, viewPort, flyCam);
 
         playerRenderer = new PlayerRenderer(rootNode);
-        playerRenderer.setUpGirl(assetManager);
-        playerRenderer.setUpPanzer(assetManager);
 
         interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, settings, guiNode);
         interfaceRenderer.renderCrosshair();

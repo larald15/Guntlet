@@ -7,11 +7,14 @@ package renderer.interfaces;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapFont.Align;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import data.PlayerData;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
@@ -60,13 +63,24 @@ public class InterfaceRenderer {
                 + "Ammo: " + PlayerData.CURRENT_AMMO);
     }
 
-    public void showMessage(String text, float seconds) {
+    public void showMessage(String text, long milliseconds) {
         BitmapFont interfaceFont = assetManager.loadFont("Interface/Fonts/College.fnt");
         BitmapText message = new BitmapText(interfaceFont);
         message.setText(text);
-        message.setAlignment(BitmapFont.Align.Center);
-        message.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0);
+        message.setName("MessageString");
+        message.setAlignment(Align.Center);
+        message.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 1.05f, 0);
+        
         guiNode.attachChild(message);
+        
+        Timer timer = new Timer();
+        
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                guiNode.detachChildNamed("MessageString");
+            }
+        }, milliseconds);
     }
 
 }
