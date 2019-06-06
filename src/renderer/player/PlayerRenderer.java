@@ -23,6 +23,7 @@ import data.PlayerData;
 public class PlayerRenderer {
 
     private final Node rootNode;
+    private Node playerArms;
 
     private Vector3f spawnCoordinates = new Vector3f(0, 1, 0);
 
@@ -45,6 +46,10 @@ public class PlayerRenderer {
         return playerModel;
     }
 
+    public void setUpArms(AssetManager assetManager) {
+        playerArms = (Node) assetManager.loadModel("Models/");
+    }
+    
     public void setUpGirl(AssetManager assetManager) {
         Spatial girl = assetManager.loadModel("Models/Girl/girl.j3o");
         girl.setLocalTranslation(0, 1, -15);

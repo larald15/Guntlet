@@ -26,6 +26,7 @@ import handler.movement.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 import renderer.bullet.BulletRenderer;
+import renderer.interfaces.InterfaceRenderer;
 
 /**
  *
@@ -42,6 +43,7 @@ public class ActionHandler {
 
     private PhysicsControler physicsControler;
     private WeaponControler weaponControler;
+    private InterfaceRenderer interfaceRenderer;
 
     private final float fireRate = 0.15f;
     private float fireTimer = fireRate;
@@ -127,7 +129,7 @@ public class ActionHandler {
 
     private void reload() {
         reloadPause = true;
-
+        
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
