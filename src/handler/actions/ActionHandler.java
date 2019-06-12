@@ -61,16 +61,18 @@ public class ActionHandler {
 
     //Key Triggers
     public static final Trigger Trigger_RELOAD = new KeyTrigger(KeyInput.KEY_R);
+    public static final Trigger Trigger_MENU = new KeyTrigger(KeyInput.KEY_I);
 
     //Key Mappings
     public static final String MAPPING_RELOAD = "Reload";
+    public static final String MAPPING_MENU = "Menu";
 
-    public ActionHandler(AssetManager assetManager, Camera cam, PhysicsControler physicsControler, Node rootNode) {
+    public ActionHandler(AssetManager assetManager, Camera cam, PhysicsControler physicsControler, InterfaceRenderer interfaceRenderer, Node rootNode) {
         this.assetManager = assetManager;
         this.cam = cam;
         this.rootNode = rootNode;
         this.physicsControler = physicsControler;
-
+        this.interfaceRenderer = interfaceRenderer;
         bulletRenderer = new BulletRenderer();
     }
 
@@ -84,8 +86,10 @@ public class ActionHandler {
 
         //Keyboard
         inputManager.addMapping(MAPPING_RELOAD, Trigger_RELOAD);
+        inputManager.addMapping(MAPPING_MENU, Trigger_MENU);
 
         inputManager.addListener(new KeyListener(), MAPPING_RELOAD);
+        inputManager.addListener(new KeyListener(), MAPPING_MENU);
     }
 
     public void action(float tpf) {
@@ -96,7 +100,11 @@ public class ActionHandler {
             }
             if (KeyListener.reload) {
                 //Animation
+
                 reload();
+            }
+            if (KeyListener.menu) {
+
             }
         }
         fireTimer -= tpf;
@@ -128,18 +136,22 @@ public class ActionHandler {
     }
 
     private void reload() {
+        interfaceRenderer.setReloading(true);
         reloadPause = true;
-        
+
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                
                 PlayerData.CURRENT_AMMO = PlayerData.MAX_AMMO;
                 reloadPause = false;
                 bulletReadyToDelete = true;
+                interfaceRenderer.setReloading(false);
             }
         }, 2500);
+
     }
 
     public void deleteBulletsAfterTime() {

@@ -21,6 +21,7 @@ public class KeyListener implements ActionListener {
     public static boolean jump = false;
     public static boolean sprint = false;
     public static boolean reload = false;
+    public static boolean menu = false;
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -38,6 +39,8 @@ public class KeyListener implements ActionListener {
             jump = isPressed;
         } else if (name.equals(ActionHandler.MAPPING_RELOAD)) {
             reload = isPressed;
+        } else if(name.equals(ActionHandler.MAPPING_MENU)){
+            menu = isPressed;
         }
     }
 

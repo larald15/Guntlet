@@ -27,14 +27,17 @@ public class InterfaceRenderer {
     private AppSettings settings;
     private Node guiNode;
 
+    private BitmapText ch;
     private BitmapText hudHealthAmmo;
+    private boolean crosshairEnabled = false;
+    private boolean reloading =false;
 
     public InterfaceRenderer(Node rootNode, AssetManager assetManager, AppSettings settings, Node guiNode) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
         this.settings = settings;
         this.guiNode = guiNode;
-        
+
         initHUD();
     }
 
@@ -50,17 +53,27 @@ public class InterfaceRenderer {
 
     public void renderCrosshair() {
         BitmapFont crosshairFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(crosshairFont, false);
+        ch = new BitmapText(crosshairFont, false);
         ch.setSize(crosshairFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");
         ch.setLocalTranslation(settings.getWidth() / 2 - crosshairFont.getCharSet().getRenderedSize() / 3 * 2,
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
-    
+
     public void refreshHUD() {
+        if(!reloading){
         hudHealthAmmo.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
                 + "Ammo: " + PlayerData.CURRENT_AMMO);
+        } else{
+             hudHealthAmmo.setText("Health: " + PlayerData.CURRENT_HEALTH + "\n"
+                + "Ammo: Reloading...");
+        }
+        if (crosshairEnabled) {
+            ch.setText("+");
+        } else {
+            ch.setText("");
+        }
     }
 
     public void showMessage(String text, long milliseconds) {
@@ -70,17 +83,25 @@ public class InterfaceRenderer {
         message.setName("MessageString");
         message.setAlignment(Align.Center);
         message.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 1.05f, 0);
-        
+
         guiNode.attachChild(message);
-        
+
         Timer timer = new Timer();
-        
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 guiNode.detachChildNamed("MessageString");
             }
         }, milliseconds);
+    }
+
+    public void showCrosshair(boolean enabled) {
+        crosshairEnabled = enabled;
+    }
+
+    public void setReloading(boolean enabled) {
+    reloading = enabled;
     }
 
 }

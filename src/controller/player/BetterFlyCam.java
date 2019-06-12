@@ -23,32 +23,31 @@ public class BetterFlyCam extends FlyByCamera {
 
     @Override
     protected void rotateCamera(float value, Vector3f axis) {
-        if (dragToRotate) {
-            if (canRotate) {
-            } else {
+        if (enabled) {
+            Matrix3f mat = new Matrix3f();
+            mat.fromAngleNormalAxis(rotationSpeed * value, axis);
+
+            Vector3f up = cam.getUp();
+            Vector3f left = cam.getLeft();
+            Vector3f dir = cam.getDirection();
+
+            mat.mult(up, up);
+            mat.mult(left, left);
+            mat.mult(dir, dir);
+
+            if (up.getY() < 0) {
                 return;
             }
+
+            Quaternion q = new Quaternion();
+            q.fromAxes(left, up, dir);
+            q.normalizeLocal();
+            cam.setAxes(q);
         }
-
-        Matrix3f mat = new Matrix3f();
-        mat.fromAngleNormalAxis(rotationSpeed * value, axis);
-
-        Vector3f up = cam.getUp();
-        Vector3f left = cam.getLeft();
-        Vector3f dir = cam.getDirection();
-
-        mat.mult(up, up);
-        mat.mult(left, left);
-        mat.mult(dir, dir);
-
-        if (up.getY() < 0) {
-            return;
-        }
-
-        Quaternion q = new Quaternion();
-        q.fromAxes(left, up, dir);
-        q.normalizeLocal();
-        cam.setAxes(q);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+    }
 }
