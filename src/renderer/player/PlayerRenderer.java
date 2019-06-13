@@ -50,22 +50,23 @@ public class PlayerRenderer {
         playerArms = (Node) assetManager.loadModel("Models/");
     }
     
-    public void setUpGirl(AssetManager assetManager) {
+    public void setUpGirl(AssetManager assetManager, Vector3f pos) {
         Spatial girl = assetManager.loadModel("Models/Girl/girl.j3o");
-        girl.setLocalTranslation(0, 1, -15);
+        girl.setLocalTranslation(pos);
         girl.scale(5);
         Material defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
         //defaultMaterial.setTexture("ColorMap", assetManager.loadTexture("Models/Girl/tartan.png"));
         girl.setMaterial(defaultMaterial);
         rootNode.attachChild(girl);
     }
-
-    public void setUpPanzer(AssetManager assetManager) {
+    
+    public void setUpPanzer(AssetManager assetManager, Vector3f pos) {
         Spatial panzer = assetManager.loadModel("Models/Panzer/IS4.blend");
-        panzer.setLocalTranslation(0, 1, -17);
+        panzer.setLocalTranslation(pos);
         panzer.scale(2);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Models/Girl/stripes.png"));
         panzer.setMaterial(mat);
+        rootNode.attachChild(panzer);
     }
 }

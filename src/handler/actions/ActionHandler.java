@@ -128,7 +128,7 @@ public class ActionHandler {
             physicsControler.addPhysicsObject(bullet);
             physicsControler.addPhysicsObject(ghost);
 
-            bullet_physics.setLinearVelocity(cam.getDirection().mult(300));
+            bullet_physics.setLinearVelocity(cam.getDirection().mult(200));
 
             PlayerData.CURRENT_AMMO--;
         } else {

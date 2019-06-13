@@ -39,7 +39,7 @@ public class KeyListener implements ActionListener {
             jump = isPressed;
         } else if (name.equals(ActionHandler.MAPPING_RELOAD)) {
             reload = isPressed;
-        } else if(name.equals(ActionHandler.MAPPING_MENU)){
+        } else if (name.equals(ActionHandler.MAPPING_MENU)) {
             menu = isPressed;
         }
     }

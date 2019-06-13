@@ -2,6 +2,7 @@ package main;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import controller.physics.PhysicsControler;
@@ -73,7 +74,7 @@ public class Main extends SimpleApplication {
         interfaceRenderer = new InterfaceRenderer(rootNode, assetManager, settings, guiNode);
         interfaceRenderer.renderCrosshair();
 
-        actionHandler = new ActionHandler(assetManager, cam, physicsControler,interfaceRenderer, rootNode);
+        actionHandler = new ActionHandler(assetManager, cam, physicsControler, interfaceRenderer, rootNode);
         actionHandler.setUpKeys(inputManager);
 
         weaponControler = new WeaponControler(rootNode, actionHandler, movementHandler);
@@ -89,14 +90,24 @@ public class Main extends SimpleApplication {
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.fromXml("Interface/GUI/StartScreen.xml", "start");
         nifty.gotoScreen("start");
-        
+
         audioHandler = new AudioHandler(assetManager);
         audioHandler.setupMusic();
+
+        playerRenderer.setUpGirl(assetManager, new Vector3f(10, 0.5f, 0));
+        playerRenderer.setUpGirl(assetManager, new Vector3f(15, 0.5f, 20));
+        playerRenderer.setUpGirl(assetManager, new Vector3f(50, 0.5f, 30));
+        playerRenderer.setUpGirl(assetManager, new Vector3f(40, 0.5f, 60));
+
+        playerRenderer.setUpPanzer(assetManager, new Vector3f(-50, 0.5f, 10));
+        playerRenderer.setUpPanzer(assetManager, new Vector3f(-44, 0.5f, -20));
+        playerRenderer.setUpPanzer(assetManager, new Vector3f(-60, 0.5f, 30));
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         movementHandler.move(cam);
+
         if (!started) {
             flyCam.setEnabled(false);
             inputManager.setCursorVisible(true);
@@ -106,6 +117,7 @@ public class Main extends SimpleApplication {
             interfaceRenderer.showCrosshair(true);
             nifty.exit();
         }
+
         actionHandler.action(tpf);
         movementHandler.prevent360(cam);
         actionHandler.deleteBulletsAfterTime();
