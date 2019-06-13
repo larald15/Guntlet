@@ -31,6 +31,10 @@ public class MapRenderer {
     private Spatial sceneModel;
     private RigidBodyControl landscape;
 
+    private float velocity = 0.08f;
+    private float ypos = 0;
+    private float mag = 0.3f;
+    
     public MapRenderer(Node rootNode, AssetManager assetManager, ViewPort viewPort) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
@@ -63,6 +67,15 @@ public class MapRenderer {
         dl.setColor(ColorRGBA.White);
         dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
         rootNode.addLight(dl);
+    }
+
+    public void shakeMap() {
+        if (ypos < (- 2 * mag) || ypos > 0) {
+            velocity *= -1;
+        }
+        
+        sceneModel.setLocalTranslation(0, ypos, 0);
+        ypos += velocity;
     }
 
     public Spatial getSceneModel() {

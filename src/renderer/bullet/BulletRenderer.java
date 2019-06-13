@@ -9,6 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
 /**
@@ -17,15 +18,16 @@ import com.jme3.scene.shape.Sphere;
  */
 public class BulletRenderer {
 
-    public Geometry renderBullet(AssetManager assetManager) {
-        Sphere bulletSphere = new Sphere(20, 20, 0.20f);
-        Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        material.setColor("Color", ColorRGBA.Black);
+    public Spatial renderBullet(AssetManager assetManager) {
+        Spatial bullet = null;
+        Material material = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
 
-        Geometry bulletGeometry = new Geometry("Bullet Sphere", bulletSphere);
-        bulletGeometry.setMaterial(material);
+        bullet = assetManager.loadModel("Models/Bullets/Stone.j3o");
+        
+        bullet.scale(0.5f);
+        bullet.setMaterial(material);
 
-        return bulletGeometry;
+        return bullet;
     }
 
     public Geometry renderHitMarker(AssetManager assetManager) {

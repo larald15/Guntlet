@@ -8,7 +8,9 @@ import controller.player.BetterFlyCam;
 import controller.weapon.WeaponControler;
 import handler.actions.ActionHandler;
 import handler.collision.CollisionHandler;
+import handler.enemies.EnemyHandler;
 import handler.movement.MovementHandler;
+import handler.sounds.BackgroundMusic;
 import renderer.interfaces.InterfaceRenderer;
 import renderer.map.MapRenderer;
 import renderer.player.PlayerRenderer;
@@ -29,6 +31,8 @@ public class Main extends SimpleApplication {
     private InterfaceRenderer interfaceRenderer;
     private ActionHandler actionHandler;
     private WeaponControler weaponControler;
+    private EnemyHandler enemyHandler;
+    private BackgroundMusic backgroundMusic;
 
     private BulletAppState bulletAppState = new BulletAppState();
 
@@ -69,6 +73,14 @@ public class Main extends SimpleApplication {
         actionHandler.setUpKeys(inputManager);
 
         weaponControler = new WeaponControler(rootNode, actionHandler, movementHandler);
+        
+        //music
+        backgroundMusic = new BackgroundMusic(assetManager);
+        backgroundMusic.setUpHardBass();
+        
+        //enemies
+        enemyHandler = new EnemyHandler(rootNode, assetManager);
+        enemyHandler.spawnEnemies();
     }
 
     @Override
@@ -79,7 +91,7 @@ public class Main extends SimpleApplication {
 
         actionHandler.deleteBulletsAfterTime();
     }
-
+    
     @Override
     public void simpleRender(RenderManager rm) {
         interfaceRenderer.refreshHUD();
