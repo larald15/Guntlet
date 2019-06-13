@@ -9,6 +9,7 @@ import controller.player.BetterFlyCam;
 import controller.weapon.WeaponControler;
 import de.lessvoid.nifty.Nifty;
 import handler.actions.ActionHandler;
+import handler.audio.AudioHandler;
 import handler.collision.CollisionHandler;
 import handler.movement.MovementHandler;
 import renderer.interfaces.InterfaceRenderer;
@@ -31,6 +32,7 @@ public class Main extends SimpleApplication {
     private InterfaceRenderer interfaceRenderer;
     private ActionHandler actionHandler;
     private WeaponControler weaponControler;
+    private AudioHandler audioHandler;
 
     private BulletAppState bulletAppState = new BulletAppState();
 
@@ -87,6 +89,9 @@ public class Main extends SimpleApplication {
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.fromXml("Interface/GUI/StartScreen.xml", "start");
         nifty.gotoScreen("start");
+        
+        audioHandler = new AudioHandler(assetManager);
+        audioHandler.setupMusic();
     }
 
     @Override

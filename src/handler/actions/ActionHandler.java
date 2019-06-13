@@ -18,6 +18,7 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import controller.physics.PhysicsControler;
 import controller.weapon.WeaponControler;
 import data.PlayerData;
@@ -112,7 +113,7 @@ public class ActionHandler {
 
     private void shootBullet() {
         if (PlayerData.CURRENT_AMMO > 0) {
-            Geometry bullet = bulletRenderer.renderBullet(assetManager);
+            Spatial bullet = bulletRenderer.renderBullet(assetManager);
             bullet.setLocalTranslation(cam.getLocation().add(cam.getDirection()));
 
             GhostControl ghost = new GhostControl(new SphereCollisionShape(0.2f));
